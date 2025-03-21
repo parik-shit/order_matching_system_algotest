@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  engine_service:
+    build:
+      context: ./engine_service
+      dockerfile: Dockerfile
+    container_name: engine_service
+    environment:
+      - DATABASE_URL=postgresql://order_user:order_password@postgres:5432/order_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+    depends_on:
+      - postgres
+      - redis
+
+  order_service:
+    build:
+      context: ./order_service
+      dockerfile: Dockerfile
+    container_name: order_service
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - engine_service
+      - redis
+
+  websocket_service:
+    build:
+      context: ./websocket_service
+      dockerfile: Dockerfile
+    container_name: websocket_service
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=order_user
+      - POSTGRES_PASSWORD=order_password
+      - POSTGRES_DB=order_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
