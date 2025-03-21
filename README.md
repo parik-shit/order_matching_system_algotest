@@ -9,3 +9,5 @@ Make a websocket request and then connect to following websockets
 `ws://localhost:8080/ws/trades`
 
 `ws://localhost:8080/ws/orderbook`
+
+![system design](./DESIGN_ORDER_MATCHING_ENGINE.png)
