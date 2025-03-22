@@ -1,68 +1,6 @@
 
 ![system design](./DESIGN_ORDER_MATCHING_ENGINE.png)
-## start 
-`docker-compose up --build`
 
-import the `OrderMatchingAPI.postman_collection.json` to postman 
-
-### websockets
-Make a websocket request and then connect to following websockets
-
-`ws://localhost:8080/ws/trades`
-
-`ws://localhost:8080/ws/orderbook`
-
-
-
-
-
-Tech Stack:
-- DB: Postgres
-- In Memory DB: Redis
-- Message Queues: Redis Stream 
-- fastapi 
-- sqlalchemy 
-- uvicorn
-
-### Services
-In this system the services are communicating using Redis Streams (message queue) and Redis Pub Sub
-
-- **Engine Service**: 
-This service is responsible for matching orders based on best ask or best bid.
-It takes in requests from the **order service** and sends back response using streams as well.
-
-***The engine service runs the engine process using a forever loop***
-
-- **Order Service** : It is the API gateway that sends the incoming requests from client for 
-    - place order  
-    - cancel order 
-    - modify order 
-    - fetch orders 
-    - fetch order 
-    - fetch trades
-
-    the payload is sent to engine service via streams
-
-- **Websocket Service**: It is the websocket server running within this service on port 8080. 
-It contains two websockets, trades and orderbook. Trades websocket sends the trade updates of successful trades to the client. The orderbook sends the orderbook snapshot of price levels with a depth of 5. 
-
-The trades are received using the trade_notfication channel in redis. Therefore whenever a trade occurs the subscriber(trade controller) it sends the update to the client via websocket.
-
-
-
-
-
-## Engine
-
-The engine is using singleton pattern to ensure that there is only one instance being used all the time. It is also using locking mechanism to prevent unecessary race conditions 
-
-
-it is using dictionaries to store the price levels and orders which 
-
-
-Below is the updated documentation with an example illustrating the data structures used in the engine.
-
----
 
 # Order Matching Engine Documentation
 
