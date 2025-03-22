@@ -23,8 +23,9 @@ The tech stack includes:
 - **Postgres** for persistent storage,
 - **Redis** as the in-memory database and for message queues (using both Streams and Pub/Sub),
 - **FastAPI** as the web framework,
-- **SQLAlchemy** for ORM,
-- **Uvicorn** as the ASGI server.
+- **SQLAlchemy** for ORM
+- **Docker** To containerize
+
 
 ### Engine Service
 
