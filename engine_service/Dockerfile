@@ -3,7 +3,7 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY wait-for-it/wait-for-it.sh /app/wait-for-it.sh
+COPY wait-for-it.sh /app/wait-for-it.sh
 RUN chmod +x /app/wait-for-it.sh
 
 # Install dependencies required by the engine (including persistence packages)
