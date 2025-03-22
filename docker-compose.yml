@@ -14,6 +14,8 @@ services:
     depends_on:
       - postgres
       - redis
+    # Use wait-for-it.sh to wait until postgres is ready before starting the service
+    command: ["./wait-for-it.sh", "postgres:5432", "--", "python", "engine_service.py"]
 
   order_service:
     build:
